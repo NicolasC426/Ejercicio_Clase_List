@@ -1,5 +1,6 @@
 package co.edu.uptc.Structures;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -108,8 +109,23 @@ public class MyList<T> implements List<T> {
 
     @Override
     public boolean remove(Object o) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'remove'");
+        if (isEmpty())
+            return false;
+        Node prev = null;
+        Node current = head;
+        while (current != null) {
+            if (current.getData().equals(o)) {
+                if (prev == null) {
+                    head = current.getNext();
+                } else {
+                    prev.setNext(current.getNext());
+                }
+                return true;
+            }
+            prev = current;
+            current = current.getNext();
+        }
+        return false;    
     }
 
     @Override
@@ -147,8 +163,18 @@ public class MyList<T> implements List<T> {
 
     @Override
     public <T> T[] toArray(T[] a) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'toArray'");
+        int size = size();
+        Iterator<T> ite = (Iterator<T>) iterator();
+        if (a.length < size) {
+            a = (T[])new Object[size];
+        }
+        for (int i = 0 ; i < size; i++){
+            a[i] = ite.next();
+        }
+        if (a.length > size){
+            a[size] = null;
+        }
+        return a;
     }
 
    
@@ -212,14 +238,28 @@ public class MyList<T> implements List<T> {
 
     @Override
     public boolean removeAll(Collection<?> c) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'removeAll'");
+        boolean removed = false;
+        Iterator<T> ite = iterator();
+        while (ite.hasNext()) {
+            if (c.contains(ite.next())) {
+                ite.remove();
+                removed = true;
+            }
+        } 
+        return removed;
     }
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'retainAll'");
+        boolean modified = false;
+        Iterator<T> ite = iterator();
+        while (ite.hasNext()) {
+            if (!c.contains(ite.next())) {
+                ite.remove();
+                modified = true;
+            }
+        }
+        return modified;
     }
 
     
@@ -241,8 +281,17 @@ public class MyList<T> implements List<T> {
 
     @Override
     public T set(int index, T element) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'set'");
+        if (index < 0 || index >= size()) {
+            throw new IndexOutOfBoundsException("Índice fuera de rango");
+        }
+        Node<T> current = head;
+        for (int i = 0; i<index ; i++){
+            current = current.getNext();
+        }
+
+        T data = current.getData();
+        current.setData(element);
+        return data;
     }
 
     

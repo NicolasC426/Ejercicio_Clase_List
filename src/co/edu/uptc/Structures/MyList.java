@@ -114,8 +114,21 @@ public class MyList<T> implements List<T> {
 
     @Override
     public Iterator<T> iterator() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'iterator'");
+        Iterator<T> iterator = new Iterator<T>() {
+            Node node = head;
+            @Override
+            public boolean hasNext() {
+                return node != null;
+            }
+            @Override
+            public T next() {
+                T value = (T) node.getData();
+                node = node.getNext();
+                return value;
+            }
+
+        };
+        return iterator;
     }
 
     @Override
@@ -135,8 +148,12 @@ public class MyList<T> implements List<T> {
 
     @Override
     public boolean containsAll(Collection<?> c) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'containsAll'");
+         for (Object listVerify : c) {
+            if (this.contains(listVerify)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -147,8 +164,37 @@ public class MyList<T> implements List<T> {
 
     @Override
     public boolean addAll(int index, Collection<? extends T> c) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addAll'");
+          if (isEmpty() == true || index < 0 || index > this.size() || c.isEmpty())
+            return false;
+        Node<T> auxhead = head;
+        Node<T> prev = null;
+        int nodePosition = 0;
+
+        while (nodePosition < index) {
+            prev = auxhead;
+            auxhead = auxhead.getNext();
+            nodePosition++;
+        }
+        Node<T> firstInsertNode = null;
+        Node<T> lastInsertNode = null;
+
+        for (T object : c) {
+            Node<T> newNode = new Node<>(object);
+            if (firstInsertNode == null) {
+                firstInsertNode = newNode;
+            } else {
+                lastInsertNode.setNext(newNode);
+            }
+            lastInsertNode = newNode;
+        }
+        if (prev == null) {
+            lastInsertNode.setNext(head);
+            head = firstInsertNode;
+        } else {
+            prev.setNext(firstInsertNode);
+            lastInsertNode.setNext(auxhead);
+        }
+        return true;
     }
 
     @Override
@@ -167,8 +213,17 @@ public class MyList<T> implements List<T> {
 
     @Override
     public T get(int index) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'get'");
+         if (index > this.size() || index < 0) {
+            throw new IndexOutOfBoundsException(
+                    "Digitizad index isn't valid for this : " + index + ", Size: " + this.size());
+        }
+        int count = 0;
+        Node<T> aux = head;
+        while (count < index) {
+            aux = aux.getNext();
+            count++;
+        }
+        return aux.getData();
     }
 
     @Override
@@ -181,14 +236,39 @@ public class MyList<T> implements List<T> {
 
     @Override
     public int indexOf(Object o) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'indexOf'");
+       Node<T> indexNode = head;
+        int position = 0;
+        while (indexNode != null) {
+            if (indexNode.getData().equals(o)) {
+                return position;
+            }
+            indexNode = indexNode.getNext();
+            position++;
+        }
+        return -1;
     }
 
     @Override
     public int lastIndexOf(Object o) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'lastIndexOf'");
+       int index = 0;
+        int lastIndex = -1;
+        Node<T> current = head;
+        while (current != null) {
+
+            if (o == null) {
+                if (current.getData() == null) {
+                    lastIndex = index;
+                }
+            } else {
+                if (o.equals(current.getData())) {
+                    lastIndex = index;
+                }
+            }
+            current = current.getNext();
+            index++;
+        }
+
+        return lastIndex;
     }
 
     @Override
@@ -205,8 +285,26 @@ public class MyList<T> implements List<T> {
 
     @Override
     public List<T> subList(int fromIndex, int toIndex) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'subList'");
+        if (fromIndex < 0 || toIndex > size() || fromIndex > toIndex) {
+            throw new IndexOutOfBoundsException("Indexes are out of range");
+        }
+
+        List<T> listReturn = new ArrayList<>();
+        Node<T> nodeaux = head;
+        int index = 0;
+
+        while (index < fromIndex && nodeaux != null) {
+            nodeaux = nodeaux.getNext();
+            index++;
+        }
+
+        while (index < toIndex && nodeaux != null) {
+            listReturn.add(nodeaux.getData());
+            nodeaux = nodeaux.getNext();
+            index++;
+        }
+
+        return listReturn;
     }
     
 }

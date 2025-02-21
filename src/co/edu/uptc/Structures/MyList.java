@@ -120,8 +120,16 @@ public class MyList<T> implements List<T> {
 
     @Override
     public Object[] toArray() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'toArray'");
+        Object[] array = new Object[size()];
+        Node<T> temp = head;
+        int aux = 0;
+
+        while(temp != null){
+            aux++;
+            array[aux] = temp.getData();
+            temp = temp.getNext();
+        }
+        return array;
     }
 
     @Override
@@ -141,8 +149,13 @@ public class MyList<T> implements List<T> {
 
     @Override
     public boolean addAll(Collection<? extends T> c) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addAll'");
+        if(c==null||c.isEmpty()){
+            return false;
+        }
+        for(T temp : c){
+            add(temp);
+        }
+        return true;
     }
 
     @Override

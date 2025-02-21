@@ -1,5 +1,8 @@
+import co.edu.uptc.Structures.MyList;
+
 public class App {
     public static void main(String[] args) throws Exception {
-        System.out.println("Hello, World!");
+        MyList list = new MyList<>();
+        
     }
 }

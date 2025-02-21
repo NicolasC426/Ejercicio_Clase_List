@@ -182,12 +182,12 @@ public class MyList<T> implements List<T> {
 
     @Override
     public boolean containsAll(Collection<?> c) {
-         for (Object listVerify : c) {
-            if (this.contains(listVerify)) {
-                return true;
+         for (Object element : c) {
+            if (!this.contains(element)) {
+                return false;
             }
         }
-        return false;
+        return true;
     }
 
     @Override
